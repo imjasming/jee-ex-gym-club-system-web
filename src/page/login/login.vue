@@ -1,54 +1,42 @@
 <template>
   <div class="login">
-    <el-form status-icon="true"
-             :label-position="top" label-width="80px"
+    <el-form id="loginForm"
+             status-icon
+             label-width="80px"
              :model="loginForm"
              ref="loginForm"
-             :role="loginRoles">
-      <el-form-item prop="username" label="username">
+             :rules="loginRoles">
+      <el-form-item prop="username" label="用户名">
         <el-input type="text" v-model="loginForm.username"></el-input>
       </el-form-item>
-      <el-form-item prop="password" label="password">
+      <el-form-item prop="password" label="密码">
         <el-input type="password" v-model="loginForm.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">Sign in
+        <el-button style="width: 100%" type="primary" :loading="loading" @click.native.prevent="handleLogin">登录
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button style="width: 100%" @click.native.prevent="">Sign up</el-button>
+        <!--<router-link to="/register" tag="button">注册</router-link>-->
+        <el-button style="width: 100%" @click.native.prevent="redirectToSIgnUp">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-  //import request from ''
+  import {passwordRule, usernameRule} from '@/utils/validator'
 
   export default {
     data () {
-      const validateUsername = (rule, value, callback) => {
-        if (/^[A-Za-z]+$/.test(value.trim())) {
-          callback(new Error('请输入正确的用户名'))
-        } else {
-          callback()
-        }
-      }
-      const validatePassword = (rule, value, callback) => {
-        if (value.length < 6) {
-          callback(new Error('密码不能小于6位'))
-        } else {
-          callback()
-        }
-      }
       return {
         loginForm: {
           username: '',
           password: '',
         },
         loginRoles: {
-          username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePassword}]
+          username: [{required: true, trigger: 'blur', validator: usernameRule}],
+          password: [{required: true, trigger: 'blur', validator: passwordRule}]
         },
         loading: false
       }
@@ -65,15 +53,33 @@
               this.loading = false
             })
           } else {
-            //TODO: make user know what's wrong
+
             return false
           }
         })
+      },
+      redirectToSIgnUp () {
+        this.$router.push({path: '/register'})
       }
     }
   }
 </script>
 
 <style scoped>
+  #loginForm {
+    width: 90%;
+    margin: auto;
+  }
 
+  /*@media only screen and (max-width: 768px) {
+    #loginForm {
+      width: 60%;
+    }
+  }
+
+  @media only screen and (max-width: 480px) {
+    #loginForm {
+      width: 80%;
+    }
+  }*/
 </style>
