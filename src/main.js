@@ -9,8 +9,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import store from './store'
 
-import './config/rem'
-
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

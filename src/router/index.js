@@ -7,6 +7,12 @@ Vue.use(VueRouter)
 
 const login = r => require.ensure([], () => r(require('@/page/login/login')), 'login')
 const register = r => require.ensure([], () => r(require('@/page/register/register')), 'register')
+const profile = r => require.ensure([], () => r(require('@/page/profile/profile')), 'profile')
+
+import layout from '@/page/layout/layout'
+import {getToken} from '@/utils/auth'
+import NProgress from 'nprogress'
+import {Message} from 'element-ui'
 
 const router = new VueRouter({
   routes: [
@@ -14,7 +20,6 @@ const router = new VueRouter({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
-      meta: {authRequired: true}
     },
     {
       path: '/login',
@@ -27,27 +32,63 @@ const router = new VueRouter({
       name: 'register',
       //redirect: '/login'  //redirect不能这样用，这样会一直重定向到 /login
     },
+    {
+      path: '/v1',
+      component: layout,
+      redirect: '/v1/profile',
+      children: [
+        {
+          path: 'profile',
+          name: 'profile',
+          component: profile,
+        },
+      ]
+    },
     {//404 notfound
-      path: '/*',
+      path: '*',
 
       name: '404notfound'
     }
   ]
 })
 
+const whiteList = ['/login', '/register']
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.authRequired)) {
-    //if there is not token, it means unauthorized, or has logout
-    if (!store.getters.token) {
+  NProgress.start()
+  // authorized, permit all
+  if (getToken()) {
+    if (to.path === '/login') {
+      next('/v1')
+      NProgress.done()
+    } else {
+      if (store.getters.userInfo.length === 0) {
+        store.dispatch('getInfo').then(res => { // 拉取用户信息
+          next()
+        }).catch((err) => {
+          store.dispatch('logOut').then(() => {
+            Message.error(err || 'Verification failed, please login again')
+            next({path: '/login'})
+          })
+        })
+      } else {
+        next()
+      }
+    }
+  } else {// unauthorized
+    if (whiteList.indexOf(to.path) === -1) {
       next({
         path: '/login',
         query: {redirect: to.fullPath}
       })
-    } else {
-      next() // 一定要调用 next()
+      NProgress.done()
+    } else {// to the path in white list
+      next()// 一定要调用 next()
     }
   }
-  next() // 一定要调用 next()
+})
+
+router.afterEach(() => {
+  NProgress.done()
 })
 
 export default router

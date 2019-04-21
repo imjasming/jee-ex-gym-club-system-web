@@ -15,7 +15,7 @@ export function passwordRule (rule, value, callback) {
 }
 
 export function emailRule (rule, value, callback) {
-  if (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value.trim()))) {
+  if (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value.trim())) || value.length < 5) {
     callback(new Error('邮箱格式错误！'))
   }
   callback()

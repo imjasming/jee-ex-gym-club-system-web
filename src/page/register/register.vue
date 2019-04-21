@@ -1,6 +1,6 @@
 <template>
-  <div class="register">
-    <el-form id="registerForm"
+  <div class="form-container">
+    <el-form id="registerForm" class="input-form"
              status-icon
              label-width="80px"
              :model="registerForm"
@@ -50,10 +50,10 @@
           repassword: '',
         },
         registerRules: {
-          username: [{require: true, trigger: 'blur', validator: usernameRule}],
-          email: [{require: true, trigger: 'blur', validator: emailRule}],
-          password: [{require: true, trigger: 'blur', validator: passwordRule}],
-          repassword: [{require: true, trigger: 'blur', validator: repasswordRule}],
+          username: [{trigger: 'blur', validator: usernameRule}],
+          email: [{trigger: 'blur', validator: emailRule}],
+          password: [{trigger: 'blur', validator: passwordRule}],
+          repassword: [{trigger: 'blur', validator: repasswordRule}],
 
         }
       }
@@ -75,7 +75,7 @@
           }
         })
       },
-      redirectToLogin(){
+      redirectToLogin () {
         this.$route.push({path: '/login'})
       }
     }
@@ -83,5 +83,8 @@
 </script>
 
 <style scoped>
+  #registerForm {
+    margin: auto;
+  }
 
 </style>

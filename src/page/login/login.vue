@@ -1,8 +1,8 @@
 <template>
-  <div class="login">
-    <el-form id="loginForm"
+  <div class="form-container">
+    <el-form id="loginForm" class="input-form"
              status-icon
-             label-width="80px"
+             label-width="6rem"
              :model="loginForm"
              ref="loginForm"
              :rules="loginRoles">
@@ -17,7 +17,6 @@
         </el-button>
       </el-form-item>
       <el-form-item>
-        <!--<router-link to="/register" tag="button">注册</router-link>-->
         <el-button style="width: 100%" @click.native.prevent="redirectToSIgnUp">注册</el-button>
       </el-form-item>
     </el-form>
@@ -35,8 +34,8 @@
           password: '',
         },
         loginRoles: {
-          username: [{required: true, trigger: 'blur', validator: usernameRule}],
-          password: [{required: true, trigger: 'blur', validator: passwordRule}]
+          username: [{require: true, trigger: 'blur', validator: usernameRule}],
+          password: [{require: true, trigger: 'blur', validator: passwordRule}]
         },
         loading: false
       }
@@ -48,7 +47,7 @@
             this.loading = true
             this.$store.dispatch('login', this.loginForm).then(() => {
               this.loading = false
-              this.$router.push({path: '/'})
+              this.$router.push({name: 'profile'})
             }).catch(() => {
               this.loading = false
             })
@@ -67,19 +66,6 @@
 
 <style scoped>
   #loginForm {
-    width: 90%;
     margin: auto;
   }
-
-  /*@media only screen and (max-width: 768px) {
-    #loginForm {
-      width: 60%;
-    }
-  }
-
-  @media only screen and (max-width: 480px) {
-    #loginForm {
-      width: 80%;
-    }
-  }*/
 </style>
