@@ -1,6 +1,5 @@
 <template>
   <div id="profile">
-    <div class="page-title">个人中心</div>
     <el-card shadow="never">
       <div class="user-profile">
         <div class="use-icon dp-in-bl">
@@ -23,7 +22,7 @@
           <el-input type="text" v-model="profileForm.email"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :loading="dataLoading" @click.native.prevent="updateProfile">更新</el-button>
+          <el-button type="primary" :loading="profileLoading" @click.native.prevent="updateProfile">更新</el-button>
         </el-form-item>
       </el-form>
       <div class="line"></div>
@@ -31,16 +30,21 @@
                label-position="left"
                label-width="6rem"
                :model="pswForm"
-               ref="profileForm"
-               :rule="pswRules">
-        <el-form-item prop="password" label="更新密码">
-          <el-input type="password" v-model="pswForm.password" placeholder="新密码"></el-input>
+               ref="pswForm"
+               :rules="pswRules">
+        <el-form-item prop="oldPassword" label="旧密码">
+          <el-input type="password" v-model="pswForm.oldPassword" placeholder="旧密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="newPassword" label="新密码">
+          <el-input type="password" v-model="pswForm.newPassword" placeholder="新密码"></el-input>
         </el-form-item>
         <el-form-item prop="repassword" label="确认密码">
           <el-input type="password" v-model="pswForm.repassword" placeholder="确认密码"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click.native.prevent="updatePsw">提交</el-button>
+          <el-button type="primary" :loading="passwordLoading"
+                     @click.native.prevent="updatePassword">提交
+          </el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -48,33 +52,37 @@
 </template>
 
 <script>
-  import request from '@/utils/request'
+  import {fetch, post} from '@/utils/request'
   import {emailRule, passwordRule} from '@/utils/validator'
+  import {Message} from 'element-ui'
 
   export default {
     data () {
       const repasswordRule = (rule, value, callback) => {
-        if (this.registerForm.password !== value) {
+        if (this.registerForm.newPassword !== value) {
           callback(new Error('两次密码不相同！'))
         }
         return passwordRule(rule, value, callback)
       }
       return {
         profileTitle: '',
-        dataLoading: false,
+        profileLoading: false,
+        passwordLoading: false,
         profileForm: {
           email: ''
         },
         pswForm: {
-          password: '',
+          oldPassword: '',
+          newPassword: '',
           repassword: ''
         },
         profileRules: {
           email: [{trigger: 'blur', validator: emailRule}]
         },
         pswRules: {
-          password: [{trigger: 'blur', validator: passwordRule}],
-          repassword: [{trigger: 'blur', validator: repasswordRule}],
+          oldPassword: [{trigger: 'blur', validator: passwordRule}],
+          newPassword: [{trigger: 'blur', validator: passwordRule}],
+          repassword: [{trigger: 'blur', validator: repasswordRule}]
         }
       }
     },
@@ -88,12 +96,8 @@
     },
     methods: {
       initUser () {
-        request({
-          url: '/user/get-info',
-          method: 'get'
-        }).then(response => {
-          const data = response.data
-          this.$store.commit('SET_INFO', data)
+        fetch('/user/get-info').then(response => {
+          this.$store.commit('SET_INFO', response)
         }).catch(() => {
 
         })
@@ -101,14 +105,41 @@
       updateProfile () {
         this.$refs.profileForm.validate(valid => {
           if (valid) {
-            this.dataLoading = true
+            this.profileLoading = true
             this.$store.dispatch('updateUserProfile', this.profileForm).then(() => {
-              this.dataLoading = false
+              this.profileLoading = false
             }).catch(error => {
-              this.dataLoading = false
+              this.profileLoading = false
             })
           } else {
             return false
+          }
+        })
+      },
+      updatePassword () {
+        this.$refs.pswForm.validate(valid => {
+          if (valid) {
+            this.passwordLoading = true
+            post('/user', {
+              oldPassword: this.pswForm.oldPassword,
+              newPassword: this.pswForm.newPassword
+            }).then(response => {
+              this.passwordLoading = false
+              Message({
+                message: '密码更新成功',
+                type: 'success',
+                duration: 8 * 1000
+              })
+              //TODO:
+            }).catch(error => {
+              this.passwordLoading = false
+              Message({
+                message: error.message,
+                type: 'error',
+                duration: 8 * 1000
+              })
+
+            })
           }
         })
       }
@@ -132,12 +163,14 @@
     }
 
     div {
-      :first-child {
+      p:first-child {
+        height: 1.2rem;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
       }
 
-      :last-child {
+      p:last-child {
         font-size: 0.8rem;
         color: gray;
       }

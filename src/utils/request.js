@@ -13,8 +13,8 @@ request.interceptors.request.use(config => {
   if (store.getters.token) {
     config.headers['Authorization'] = getToken()
   }
-  console.info(config.url + ', ' +
-    JSON.stringify(config.data) + ', ' +
+  console.info(config.url + ', d: ' +
+    JSON.stringify(config.data) + ', p: ' +
     JSON.stringify(config.params))
   return config
 }, error => {
@@ -48,14 +48,38 @@ request.interceptors.response.use(
           })
         })
       } else {
-        Message({
-          message: error.message,
-          type: 'error',
-          duration: 8 * 1000
-        })
+
       }
-      return Promise.reject(error)
     }
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 8 * 1000
+    })
+    return Promise.reject(error)
+  }
+)
+
+export const post = (url, data) => {
+  return new Promise((resolve, reject) => {
+    request.post(url, data).then(response => {
+      resolve(response.data)
+    }).catch(error => {
+      reject(error)
+    })
   })
+}
+
+export const fetch = (url, param) => {
+  return new Promise((resolve, reject) => {
+    request.get(url, {
+      params: param
+    }).then(response => {
+      resolve(response.data)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
 
 export default request

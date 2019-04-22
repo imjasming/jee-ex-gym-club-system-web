@@ -17,3 +17,7 @@ export const removeStore = (key) => {
   if (!key) return;
   window.localStorage.removeItem(key)
 }
+
+export const clearStore = () => {
+  window.localStorage.clear()
+}

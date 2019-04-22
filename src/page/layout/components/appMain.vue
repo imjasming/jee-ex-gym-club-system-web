@@ -1,9 +1,9 @@
 <template>
-    <el-main class="app-main">
-      <transition name="fade" mode="out-in">
-        <router-view></router-view>
-      </transition>
-    </el-main>
+  <el-main id="app-main">
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
+  </el-main>
 </template>
 
 <script>
@@ -13,5 +13,7 @@
 </script>
 
 <style scoped>
-
+  #app-main {
+    display: block;
+  }
 </style>

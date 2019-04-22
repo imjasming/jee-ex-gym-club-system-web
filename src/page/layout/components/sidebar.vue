@@ -1,17 +1,16 @@
 <template>
   <el-menu id="nav"
-    default-active="2"
-    class="el-menu-vertical-demo"
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b">
+           default-active="2"
+           class="el-menu-vertical-demo"
+           background-color="#545c64"
+           text-color="#fff"
+           active-text-color="#ffd04b">
 
     <el-submenu index="1">
       <template slot="title">
-        <span>Home</span>
+        <span>主页</span>
       </template>
-      <el-menu-item index="1-1">gym</el-menu-item>
-      <el-menu-item index="1-2">couches</el-menu-item>
+      <el-menu-item index="1-1">健身</el-menu-item>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">

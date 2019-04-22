@@ -41,6 +41,9 @@ const router = new VueRouter({
           path: 'profile',
           name: 'profile',
           component: profile,
+          meta: {
+            title: '个人中心'
+          }
         },
       ]
     },
