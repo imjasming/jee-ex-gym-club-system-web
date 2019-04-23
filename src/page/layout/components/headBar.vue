@@ -37,10 +37,9 @@
   #headBar {
     position: relative;
     top: 0;
-    width: 100%;
-    height: 2.5rem;
+    height: 2.4rem;
     padding: 0.2rem 0.2rem 0.2rem 0.5rem;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.3rem;
     display: block;
     z-index: 999;
     border-bottom: 1px solid $fade-gray-color;

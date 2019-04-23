@@ -4,7 +4,7 @@
            class="el-menu-vertical-demo"
            background-color="#545c64"
            text-color="#fff"
-           active-text-color="#ffd04b">
+           active-text-color="#409eff">
 
     <el-submenu index="1">
       <template slot="title">

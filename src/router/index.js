@@ -8,6 +8,7 @@ Vue.use(VueRouter)
 const login = r => require.ensure([], () => r(require('@/page/login/login')), 'login')
 const register = r => require.ensure([], () => r(require('@/page/register/register')), 'register')
 const profile = r => require.ensure([], () => r(require('@/page/profile/profile')), 'profile')
+const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
 
 import layout from '@/page/layout/layout'
 import {getToken} from '@/utils/auth'
@@ -33,9 +34,30 @@ const router = new VueRouter({
       //redirect: '/login'  //redirect不能这样用，这样会一直重定向到 /login
     },
     {
-      path: '/v1',
+      path: '/home',
       component: layout,
-      redirect: '/v1/profile',
+      redirect: '/home/trainer',
+      meta: {
+        name: '主页',
+      },
+      children: [
+        {
+          path: 'trainer',
+          name: 'trainer',
+          component: home,
+          meta: {
+            title: '健身教练'
+          }
+        },
+      ]
+    },
+    {
+      path: '/me',
+      component: layout,
+      redirect: '/me/profile',
+      meta: {
+        name: '我的',
+      },
       children: [
         {
           path: 'profile',

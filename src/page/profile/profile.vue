@@ -2,12 +2,12 @@
   <div id="profile">
     <el-card shadow="never">
       <div class="user-profile">
-        <div class="use-icon dp-in-bl">
-          <img :src="'http://127.0.0.1:8082/img/head.png'">
+        <div class="dp-in-bl head-icon-container">
+          <img class="round-head-icon" :src="'http://127.0.0.1:8082/img/head.png'">
         </div>
         <div class="dp-in-bl">
-          <p>{{userInfo.username}}</p>
-          <p>email: {{userInfo.email}}</p>
+          <p class="prim-text">{{userInfo.username}}</p>
+          <p class="sub-text">email: {{userInfo.email}}</p>
         </div>
       </div>
     </el-card>
@@ -154,25 +154,13 @@
   .user-profile {
     display: inline-block;
 
-    img {
-      border: 2px solid $fade-gray-color;
-      border-radius: 50%;
+    .head-icon-container {
       width: 3.5rem;
       height: 3.5rem;
-      margin-right: 1rem;
     }
 
     div {
       p:first-child {
-        height: 1.2rem;
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        margin-top: 0.5rem;
-      }
-
-      p:last-child {
-        font-size: 0.8rem;
-        color: gray;
       }
     }
 
