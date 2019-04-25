@@ -3,8 +3,10 @@ import store from '../store'
 import {getToken} from '@/utils/auth'
 import {Message, MessageBox} from 'element-ui'
 
+export const serverUrl = 'http://127.0.0.1:8081'
+
 const request = axios.create({
-  baseURL: 'http://127.0.0.1:8082',
+  baseURL: serverUrl,
   timeout: 16000
 })
 

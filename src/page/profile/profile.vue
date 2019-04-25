@@ -3,7 +3,7 @@
     <el-card shadow="never">
       <div class="user-profile">
         <div class="dp-in-bl head-icon-container">
-          <img class="round-head-icon" :src="'http://127.0.0.1:8082/img/head.png'">
+          <img class="round-head-icon" :src="serverUrl + '/img/head.png'">
         </div>
         <div class="dp-in-bl">
           <p class="prim-text">{{userInfo.username}}</p>
@@ -55,6 +55,7 @@
   import {fetch, post} from '@/utils/request'
   import {emailRule, passwordRule} from '@/utils/validator'
   import {Message} from 'element-ui'
+  import {serverUrl} from '@/utils/request'
 
   export default {
     data () {
@@ -65,6 +66,7 @@
         return passwordRule(rule, value, callback)
       }
       return {
+        serverUrl: serverUrl,
         profileTitle: '',
         profileLoading: false,
         passwordLoading: false,
@@ -120,7 +122,7 @@
         this.$refs.pswForm.validate(valid => {
           if (valid) {
             this.passwordLoading = true
-            post('/user', {
+            post('/user/reset-password', {
               oldPassword: this.pswForm.oldPassword,
               newPassword: this.pswForm.newPassword
             }).then(response => {

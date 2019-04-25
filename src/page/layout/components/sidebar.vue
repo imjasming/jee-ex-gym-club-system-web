@@ -8,16 +8,22 @@
 
     <el-submenu index="1">
       <template slot="title">
-        <span>主页</span>
+        <span>首页</span>
       </template>
-      <el-menu-item index="1-1">健身</el-menu-item>
+      <router-link :to="'/home/trainer'">
+        <el-menu-item index="1-1">健身中心</el-menu-item>
+      </router-link>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">
         <span>我的</span>
       </template>
-      <el-menu-item index="2-1">个人中心</el-menu-item>
-      <el-menu-item index="2-2">私人教练</el-menu-item>
+      <router-link :to="'/me/profile'">
+        <el-menu-item index="2-1">个人中心</el-menu-item>
+      </router-link>
+      <router-link :to="'/me/trainer'">
+        <el-menu-item index="2-2">私人教练</el-menu-item>
+      </router-link>
     </el-submenu>
   </el-menu>
 </template>
@@ -31,11 +37,12 @@
         activeIndex2: '1'
       }
     },
-    methods: {
-      handleSelect (key, keyPath) {
-        console.log(key, keyPath)
+    computed: {
+      routes () {
+        return this.$router.options.routes
       }
-    }
+    },
+    methods: {}
   }
 </script>
 

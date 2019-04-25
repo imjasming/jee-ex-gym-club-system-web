@@ -15,5 +15,6 @@
 <style scoped>
   #app-main {
     display: block;
+    padding: 1rem 10%;
   }
 </style>

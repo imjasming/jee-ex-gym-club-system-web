@@ -1,6 +1,5 @@
-
 export const setStore = (key, value) => {
-  if (!key) return;
+  if (!key) return
   if (typeof value !== 'string') {
     value = JSON.stringify(value)
   }
@@ -9,12 +8,15 @@ export const setStore = (key, value) => {
 }
 
 export const getStore = (key) => {
-  if (!key) return;
-  return window.localStorage.getItem(key)
+  if (!key) return
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // 别忘了转成 json，保存的是 string
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  return JSON.parse(window.localStorage.getItem(key))
 }
 
 export const removeStore = (key) => {
-  if (!key) return;
+  if (!key) return
   window.localStorage.removeItem(key)
 }
 

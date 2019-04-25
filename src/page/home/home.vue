@@ -1,37 +1,27 @@
 <template>
   <div id="home">
-    <el-card class="list-item"
-             v-for="item in trainerList" :key="item.id"
-             shadow="never">
-      <div class="dp-in-bl head-icon-container">
-        <img class="round-head-icon" :src="item.icon"/>
-      </div>
-      <div class="dp-in-bl">
-        <p class="prim-text">{{item.name}}</p>
-        <p class="sub-text">{{item.intro}}</p>
-      </div>
-      <!--<div class="dp-in-bl">
-        <el-button class="" v-bind:disabled="item.id | isFollowed" @click="follow"
-                   :loading="trainerLoading">
-          {{loadMoreTrainer?'没有更多数据了':'加载更多'}}
-        </el-button>
-      </div>-->
-    </el-card>
-    <el-card class="" shadow="never">
+    <trainer-item v-for="item in trainerList" :trainer="item" :key="item.id">
+    </trainer-item>
+    <div class="my-card pd-none">
       <el-button style="width: 100%" v-bind:disabled="loadMoreTrainer" @click="getTrainerList"
                  :loading="trainerLoading">
         {{loadMoreTrainer?'没有更多数据了':'加载更多'}}
       </el-button>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script>
   import {fetch} from '@/utils/request'
   import {Message} from 'element-ui'
+  import trainerItem from './components/trainerItem'
+  import {serverUrl} from '@/utils/request'
 
   export default {
     name: 'home',
+    components: {
+      trainerItem
+    },
     data () {
       return {
         gymList: [],
@@ -63,7 +53,7 @@
         }).then(data => {
           if (data) {
             for (let item of data.content) {
-              item.icon = 'http://127.0.0.1:8082/img/trainericon.jpg'
+              item.icon = serverUrl + '/img/trainericon.jpg'
               this.trainerList.push(item)
             }
             this.trainerPage.current++
@@ -96,10 +86,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .list-item {
-    .head-icon-container {
-      width: 3rem;
-      height: 3rem;
-    }
-  }
+
 </style>

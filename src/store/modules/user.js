@@ -1,12 +1,13 @@
 import {getToken, setToken, removeToken} from '@/utils/auth'
-import {getStore, setStore} from '@/utils/localStorage'
-import request from '@/utils/request'
+import {clearStore, getStore, setStore} from '@/utils/localStorage'
+import request, {post} from '@/utils/request'
+import {Message} from 'element-ui'
 
 const user = {
   state: {
     username: '',
     token: getToken(),
-    userInfo: {},
+    userInfo: getStore('userInfo'),
     trainerList: [],
   },
 
@@ -24,7 +25,8 @@ const user = {
     SET_TRAINER_LIST: (state, list) => {
       state.trainerList = list
       setStore('trainerList', list)
-    }
+    },
+
   },
 
   actions: {
@@ -42,8 +44,8 @@ const user = {
         }).then(response => {
           const data = response.data
           const token = data.tokenHead + data.token
-          setToken(token)
           commit('SET_TOKEN', token)
+          setToken(token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -77,6 +79,7 @@ const user = {
         //clear token
         commit('SET_TOKEN', '')
         removeToken()
+        clearStore()
         resolve()
       })
     },
@@ -125,6 +128,21 @@ const user = {
           resolve()
         }).catch(error => {
           reject(error)
+        })
+      })
+    },
+    addTrainer ({commit, state}, trainerId) {
+      const username = state.userInfo.username
+      return post('/user/add-trainer/' + username + '?trainerId=' + trainerId).then(data => {
+        if (data) {
+          let array = state.trainerList.concat(data.content)
+          commit('SET_TRAINER_LIST', array)
+        }
+      }).catch(error => {
+        Message({
+          message: 'add failure',
+          type: 'error',
+          duration: 6 * 1000
         })
       })
     }

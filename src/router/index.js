@@ -46,7 +46,7 @@ const router = new VueRouter({
           name: 'trainer',
           component: home,
           meta: {
-            title: '健身教练'
+            title: '健身中心'
           }
         },
       ]
@@ -86,11 +86,11 @@ router.beforeEach((to, from, next) => {
       next('/v1')
       NProgress.done()
     } else {
-      if (store.getters.userInfo.length === 0) {
+      if (!store.getters.userInfo || store.getters.userInfo.length === 0) {
         store.dispatch('getInfo').then(res => { // 拉取用户信息
           next()
         }).catch((err) => {
-          store.dispatch('logOut').then(() => {
+          store.dispatch('logout').then(() => {
             Message.error(err || 'Verification failed, please login again')
             next({path: '/login'})
           })
