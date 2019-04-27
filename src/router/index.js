@@ -9,6 +9,7 @@ const login = r => require.ensure([], () => r(require('@/page/login/login')), 'l
 const register = r => require.ensure([], () => r(require('@/page/register/register')), 'register')
 const profile = r => require.ensure([], () => r(require('@/page/profile/profile')), 'profile')
 const home = r => require.ensure([], () => r(require('@/page/home/home')), 'home')
+const myTrainers = r => require.ensure([], () => r(require('@/page/myTrainer/myTrainer')), 'myTrainers')
 
 import layout from '@/page/layout/layout'
 import {getToken} from '@/utils/auth'
@@ -36,14 +37,14 @@ const router = new VueRouter({
     {
       path: '/home',
       component: layout,
-      redirect: '/home/trainer',
+      redirect: '/home/center',
       meta: {
         name: '主页',
       },
       children: [
         {
-          path: 'trainer',
-          name: 'trainer',
+          path: 'center',
+          name: 'center',
           component: home,
           meta: {
             title: '健身中心'
@@ -67,6 +68,14 @@ const router = new VueRouter({
             title: '个人中心'
           }
         },
+        {
+          path: 'trainer',
+          name: 'myTrainers',
+          component: myTrainers,
+          meta: {
+            title: '私人教练'
+          }
+        },
       ]
     },
     {//404 notfound
@@ -83,11 +92,11 @@ router.beforeEach((to, from, next) => {
   // authorized, permit all
   if (getToken()) {
     if (to.path === '/login') {
-      next('/v1')
+      next('/home')
       NProgress.done()
     } else {
       if (!store.getters.userInfo || store.getters.userInfo.length === 0) {
-        store.dispatch('getInfo').then(res => { // 拉取用户信息
+        store.dispatch('initUser').then(res => { // 拉取用户信息
           next()
         }).catch((err) => {
           store.dispatch('logout').then(() => {

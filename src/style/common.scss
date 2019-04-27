@@ -48,6 +48,54 @@ html, body, p {
   }
 }
 
+.gym-card-container {
+  width: 100%;
+  margin: auto;
+
+  .img-text-card {
+    position: relative;
+    width: 16rem;
+    height: 16rem;
+  }
+}
+
+.img-text-card-img {
+  height: 10rem;
+  width: 16rem;
+
+  div {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+.img-text-card {
+  border-radius: 2px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.img-text-card-item {
+  margin-bottom: 0.8rem;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.img-text-card-item::after {
+  clear: both;
+}
+
+.img-text-card-item::after, .img-text-card-item::before {
+  display: table;
+  content: "";
+}
+
+
 .my-card {
   padding: 0.8rem;
   border: 1px solid $fade-gray-color;
@@ -79,11 +127,17 @@ html, body, p {
   margin-bottom: 0.4rem;
   margin-top: 0.4rem;
   font-size: 1.1rem;
+  color: #303133;
 }
 
 .sub-text {
   font-size: 0.8rem;
-  color: gray;
+  color: #909399;
+}
+
+.common-text {
+  font-size: 1rem;
+  color: #606266;
 }
 
 .page-title {

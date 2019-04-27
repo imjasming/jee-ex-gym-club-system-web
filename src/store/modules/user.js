@@ -83,7 +83,20 @@ const user = {
         resolve()
       })
     },
-
+    initUser ({commit, state}) {
+      return new Promise((resolve, reject) => {
+        const getInfo = request.get('/user/get-info')
+        const getTrainers = request.get('/user/trainers')
+        request.all([getInfo, getTrainers]).then(request.spread((info, trainers) => {
+            commit('SET_INFO', info.data)
+            commit('SET_TRAINER_LIST', trainers.data)
+            resolve()
+          })
+        ).catch(error => {
+          reject(error)
+        })
+      })
+    },
     getInfo ({commit, state}) {
       return new Promise((resolve, reject) => {
         request({
@@ -92,20 +105,22 @@ const user = {
         }).then(response => {
           const data = response.data
           commit('SET_INFO', data)
+          //commit('SET_TRAINER_LIST', data.trainers)
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
-    getTrainerList ({commit, state}) {
+    getMyTrainerList ({commit, state}) {
       return new Promise((resolve, reject) => {
+        const username = state.userInfo.username
         request({
-          url: '/user/get-list',
+          url: '/user/trainers',
           method: 'get'
         }).then(response => {
           const data = response.data
-          commit('SET_INFO', data)
+          commit('SET_TRAINER_LIST', data)
           resolve()
         }).catch(error => {
           reject(error)
@@ -133,10 +148,9 @@ const user = {
     },
     addTrainer ({commit, state}, trainerId) {
       const username = state.userInfo.username
-      return post('/user/add-trainer/' + username + '?trainerId=' + trainerId).then(data => {
+      return post('/user/' + username + '/add-trainer/' + '?trainerId=' + trainerId).then(data => {
         if (data) {
-          let array = state.trainerList.concat(data.content)
-          commit('SET_TRAINER_LIST', array)
+          commit('SET_TRAINER_LIST', data.content)
         }
       }).catch(error => {
         Message({

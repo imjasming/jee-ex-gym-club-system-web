@@ -163,6 +163,8 @@
 
     div {
       p:first-child {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
       }
     }
 

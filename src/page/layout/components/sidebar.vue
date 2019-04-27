@@ -10,7 +10,7 @@
       <template slot="title">
         <span>首页</span>
       </template>
-      <router-link :to="'/home/trainer'">
+      <router-link :to="'/home'">
         <el-menu-item index="1-1">健身中心</el-menu-item>
       </router-link>
     </el-submenu>

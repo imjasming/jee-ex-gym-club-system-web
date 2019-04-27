@@ -30,7 +30,7 @@
     },
     computed: {
       hasAdded () {
-        const userTrainers = this.$store.state.user.userInfo.trainers
+        const userTrainers = this.$store.state.user.trainerList
         return userTrainers.map(item => item.id).includes(this.trainer.id)
       }
     },
@@ -38,7 +38,6 @@
       addTrainer () {
         this.dataLoading = true
         this.$store.dispatch('addTrainer', this.trainer.id).then(() => {
-          this.added = true
         })
         this.dataLoading = false
       }

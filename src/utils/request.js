@@ -35,6 +35,7 @@ request.interceptors.response.use(
     return response
   },
   error => {
+    let errorMsg = error.message
     if (error.response) {
       const code = error.response.status
       console.log(code + ', ' + error)// for debug
@@ -50,11 +51,11 @@ request.interceptors.response.use(
           })
         })
       } else {
-
       }
+      errorMsg = error.response.data
     }
     Message({
-      message: error.message,
+      message: errorMsg,
       type: 'error',
       duration: 8 * 1000
     })
