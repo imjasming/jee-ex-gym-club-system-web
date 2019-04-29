@@ -48,6 +48,9 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-card shadow="never">
+      <el-button type="danger" @click="logout">退出登录</el-button>
+    </el-card>
   </div>
 </template>
 
@@ -143,6 +146,11 @@
 
             })
           }
+        })
+      },
+      logout () {
+        this.$store.dispatch('logout').then(() => {
+          location.reload()
         })
       }
     },

@@ -5,7 +5,7 @@
     </div>
     <div class="dp-in-bl">
       <p class="prim-text">{{trainer.name}}</p>
-      <p class="sub-text">{{trainer.intro}}</p>
+      <p class="sub-text">简介：{{trainer.intro}}</p>
     </div>
     <div class="dp-in-bl">
       <el-button class="" v-bind:disabled="hasAdded" @click="addTrainer" :loading="dataLoading">
@@ -31,7 +31,10 @@
     computed: {
       hasAdded () {
         const userTrainers = this.$store.state.user.trainerList
-        return userTrainers.map(item => item.id).includes(this.trainer.id)
+        if (userTrainers) {
+          return userTrainers.map(item => item.id).includes(this.trainer.id)
+        }
+        return false
       }
     },
     methods: {

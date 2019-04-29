@@ -95,8 +95,8 @@ router.beforeEach((to, from, next) => {
       next('/home')
       NProgress.done()
     } else {
-      if (!store.getters.userInfo || store.getters.userInfo.length === 0) {
-        store.dispatch('initUser').then(res => { // 拉取用户信息
+      if (!store.getters.userInfo || store.getters.userInfo.length === 0 || !store.getters.trainerList) {
+        store.dispatch('initUserData').then(res => { // 拉取用户信息
           next()
         }).catch((err) => {
           store.dispatch('logout').then(() => {
@@ -112,7 +112,7 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) === -1) {
       next({
         path: '/login',
-        query: {redirect: to.fullPath}
+        //query: {redirect: to.fullPath}
       })
       NProgress.done()
     } else {// to the path in white list

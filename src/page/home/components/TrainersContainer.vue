@@ -3,9 +3,9 @@
     <trainer-item v-for="item in trainerList" :trainer="item" :key="item.id">
     </trainer-item>
     <div class="my-card pd-none">
-      <el-button style="width: 100%" v-bind:disabled="loadMore" @click="getTrainerList"
+      <el-button style="width: 100%" v-bind:disabled="isLastPage" @click="getTrainerList"
                  :loading="dataLoading">
-        {{loadMore?'没有更多数据了':'加载更多'}}
+        {{isLastPage?'没有更多数据了':'加载更多'}}
       </el-button>
     </div>
   </div>
@@ -27,10 +27,8 @@
         currentPage: 0,
         pageSize: 10,
         totalPage: 0,
-        loadMore:
-          false,
-        dataLoading:
-          false,
+        isLastPage: false,
+        dataLoading: false,
       }
     },
     created () {
@@ -51,9 +49,10 @@
               this.trainerList.push(item)
             }
             this.currentPage++
+            this.isLastPage = data.last
           } else {
             Message({
-              message: 'data getting failure',
+              message: 'data loading failure',
               type: 'error',
               duration: 3 * 1000
             })
@@ -62,7 +61,7 @@
           if (error.response) {
             const code = error.response.status
             if (code === 404) {
-              this.loadMore = true
+              this.isLastPage = true
             }
           } else {
             Message({

@@ -1,4 +1,5 @@
 $fade-gray-color: #e6e6e6;
+$color-primary: #409EFF;
 a {
   text-decoration: none;
 }
@@ -30,15 +31,18 @@ html, body, p {
 
   .form-container {
     margin: auto;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s;
 
     form {
       padding: 6rem 6rem 6rem 0;
-      margin-top: auto;
+      box-shadow: 0 0 0.2rem #000000;
+      transition: all 0.5s;
+
+      input {
+        transition: all 0.5s;
+      }
 
       &:hover, :focus {
-        animation: shadowFadeIn 1s ease 1 forwards;
+        box-shadow: 0 0 1rem #000000;
       }
 
       &::after {
@@ -71,9 +75,15 @@ html, body, p {
 }
 
 .img-text-card {
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0);
   border-radius: 2px;
   display: inline-block;
   vertical-align: top;
+}
+
+.img-text-card:hover {
+  border: 1px solid $color-primary;
 }
 
 .img-text-card-item {
@@ -101,6 +111,10 @@ html, body, p {
   border: 1px solid $fade-gray-color;
   display: block;
   overflow: hidden;
+}
+
+.my-card:hover {
+  border: 1px solid $color-primary;
 }
 
 .line {

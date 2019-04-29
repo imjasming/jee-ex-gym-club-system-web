@@ -16,6 +16,9 @@
 
   export default {
     name: 'home',
+    data () {
+      return {}
+    },
     components: {
       trainerContainer,
       gymContainer,

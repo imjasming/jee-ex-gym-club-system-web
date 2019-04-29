@@ -8,7 +8,7 @@ const user = {
     username: '',
     token: getToken(),
     userInfo: getStore('userInfo'),
-    trainerList: [],
+    trainerList: getStore('trainerList'),
   },
 
   mutations: {
@@ -83,7 +83,7 @@ const user = {
         resolve()
       })
     },
-    initUser ({commit, state}) {
+    initUserData ({commit, state}) {
       return new Promise((resolve, reject) => {
         const getInfo = request.get('/user/get-info')
         const getTrainers = request.get('/user/trainers')
@@ -93,6 +93,9 @@ const user = {
             resolve()
           })
         ).catch(error => {
+          if (error.response.status === 404) {
+            resolve()
+          }
           reject(error)
         })
       })
@@ -114,7 +117,6 @@ const user = {
     },
     getMyTrainerList ({commit, state}) {
       return new Promise((resolve, reject) => {
-        const username = state.userInfo.username
         request({
           url: '/user/trainers',
           method: 'get'
@@ -148,9 +150,9 @@ const user = {
     },
     addTrainer ({commit, state}, trainerId) {
       const username = state.userInfo.username
-      return post('/user/' + username + '/add-trainer/' + '?trainerId=' + trainerId).then(data => {
+      return post('/user/' + username + '/add-trainer' + '?trainerId=' + trainerId).then(data => {
         if (data) {
-          commit('SET_TRAINER_LIST', data.content)
+          commit('SET_TRAINER_LIST', data)
         }
       }).catch(error => {
         Message({

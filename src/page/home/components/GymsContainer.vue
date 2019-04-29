@@ -53,7 +53,7 @@
             this.isLastPage = data.last
           } else {
             Message({
-              message: 'data getting failure',
+              message: 'data loading failure',
               type: 'error',
               duration: 3 * 1000
             })

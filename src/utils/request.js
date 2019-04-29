@@ -10,6 +10,12 @@ const request = axios.create({
   timeout: 16000
 })
 
+// !!!!!!!!!!!!!!!!!!!!!!!
+// 发送多个请求时，由于使用的时自己封装的 axios，以下两函数没有封装进去
+// !!!!!!!!!!!!!!!!!!!!!!
+request.all = axios.all
+request.spread = axios.spread
+
 // request拦截器
 request.interceptors.request.use(config => {
   if (store.getters.token) {
