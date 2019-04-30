@@ -130,8 +130,14 @@
               newPassword: this.pswForm.newPassword
             }).then(response => {
               this.passwordLoading = false
+              let message = ''
+              if (response.data == null || !response.data) {
+                message = '密码验证失败'
+              } else {
+                message = '密码更新成功'
+              }
               Message({
-                message: '密码更新成功',
+                message: message,
                 type: 'success',
                 duration: 8 * 1000
               })
