@@ -12,7 +12,13 @@ export const getStore = (key) => {
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // 别忘了转成 json，保存的是 string
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  return JSON.parse(window.localStorage.getItem(key))
+  let data = window.localStorage.getItem(key)
+  try {
+    data = JSON.parse(data)
+  } catch (e) {
+
+  }
+  return data
 }
 
 export const removeStore = (key) => {

@@ -1,11 +1,11 @@
 import {getToken, setToken, removeToken} from '@/utils/auth'
 import {clearStore, getStore, setStore} from '@/utils/localStorage'
-import request, {post} from '@/utils/request'
+import request, {post, put} from '@/utils/request'
 import {Message} from 'element-ui'
 
 const user = {
   state: {
-    username: '',
+    username: getStore('username'),
     token: getToken(),
     userInfo: getStore('userInfo'),
     trainerList: getStore('trainerList'),
@@ -17,10 +17,12 @@ const user = {
     },
     SET_USERNAME: (state, username) => {
       state.username = username
+      setStore('username', state.username)
     },
     SET_INFO: (state, info) => {
       state.userInfo = info
       setStore('userInfo', info)
+      state.username = state.userInfo.username
     },
     SET_TRAINER_LIST: (state, list) => {
       state.trainerList = list
@@ -35,7 +37,7 @@ const user = {
         const username = loginForm.username
         const password = loginForm.password
         request({
-          url: '/login?username=' + username + '&password=' + password,
+          url: '/auth/login?username=' + username + '&password=' + password,
           method: 'post',
           /*data: {
             'username': username,
@@ -45,6 +47,7 @@ const user = {
           const data = response.data
           const token = data.tokenHead + data.token
           commit('SET_TOKEN', token)
+          commit('SET_USERNAME', username)
           setToken(token)
           resolve()
         }).catch(error => {
@@ -85,8 +88,9 @@ const user = {
     },
     initUserData ({commit, state}) {
       return new Promise((resolve, reject) => {
-        const getInfo = request.get('/user/get-info')
-        const getTrainers = request.get('/user/trainers')
+        const username = state.username
+        const getInfo = request.get('/user/' + username + '/info')
+        const getTrainers = request.get('/user/' + username + '/trainers')
         request.all([getInfo, getTrainers]).then(request.spread((info, trainers) => {
             commit('SET_INFO', info.data)
             commit('SET_TRAINER_LIST', trainers.data)
@@ -102,8 +106,9 @@ const user = {
     },
     getInfo ({commit, state}) {
       return new Promise((resolve, reject) => {
+        const username = state.userInfo.username
         request({
-          url: '/user/get-info',
+          url: '/user/' + username + '/info',
           method: 'get'
         }).then(response => {
           const data = response.data
@@ -117,8 +122,9 @@ const user = {
     },
     getMyTrainerList ({commit, state}) {
       return new Promise((resolve, reject) => {
+        const username = state.userInfo.username
         request({
-          url: '/user/trainers',
+          url: '/user/' + username + '/trainers',
           method: 'get'
         }).then(response => {
           const data = response.data
@@ -133,9 +139,8 @@ const user = {
       return new Promise((resolve, reject) => {
         const email = profileForm.email
         const username = state.userInfo.username
-        request({
-          url: '/user/' + username + '/update-profile',
-          method: 'post',
+        put({
+          url: '/user/' + username + '/profile',
           data: {
             email
           }
@@ -150,7 +155,7 @@ const user = {
     },
     addTrainer ({commit, state}, trainerId) {
       const username = state.userInfo.username
-      return post('/user/' + username + '/add-trainer' + '?trainerId=' + trainerId).then(data => {
+      return post('/user/' + username + '/trainer' + '?trainerId=' + trainerId).then(data => {
         if (data) {
           commit('SET_TRAINER_LIST', data)
         }

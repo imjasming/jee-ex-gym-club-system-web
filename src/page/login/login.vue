@@ -19,12 +19,16 @@
       <el-form-item>
         <el-button style="width: 100%" @click.native.prevent="redirectToSIgnUp">注册</el-button>
       </el-form-item>
+      <el-form-item class="link-button" v-for="item in oauthList" :key="item.clientName">
+        <a :href="item.clientUrl">{{item.clientName}}</a>
+      </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
   import {passwordRule, usernameRule} from '@/utils/validator'
+  import {fetch} from '@/utils/request'
 
   export default {
     data () {
@@ -37,8 +41,12 @@
           username: [{require: true, trigger: 'blur', validator: usernameRule}],
           password: [{require: true, trigger: 'blur', validator: passwordRule}]
         },
-        loading: false
+        loading: false,
+        oauthList: [],
       }
+    },
+    mounted () {
+      this.getOauthClients()
     },
     methods: {
       handleLogin () {
@@ -59,6 +67,11 @@
       },
       redirectToSIgnUp () {
         this.$router.push({path: '/register'})
+      },
+      getOauthClients () {
+        fetch('/auth/oauth2-client').then(data => {
+          this.oauthList = data
+        })
       }
     }
   }
@@ -68,4 +81,5 @@
   #loginForm {
     margin: auto;
   }
+
 </style>

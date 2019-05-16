@@ -97,7 +97,7 @@
       }
     },
     created () {
-      this.initUser()
+      //this.initUser()
     },
     methods: {
       initUser () {
@@ -165,8 +165,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "src/style/common.scss";
-
   .user-profile {
     display: inline-block;
 

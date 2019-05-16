@@ -1,11 +1,17 @@
 $fade-gray-color: #e6e6e6;
 $color-primary: #409EFF;
+$color-border-grey: #DCDFE6;
+$color-common-text: #606266;
+$color-bk-hover-blue: #ecf5ff;
+$color-text-blue: #c6e2ff;
+
 a {
   text-decoration: none;
 }
 
 html, body, p {
   margin: 0;
+  font-size: 14px;
 }
 
 #app {
@@ -49,6 +55,23 @@ html, body, p {
         animation: shadowFadeOut 1s ease 1 forwards;
       }
     }
+  }
+}
+
+.link-button {
+  a {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid $color-border-grey;
+    border-radius: 5px;
+    color: $color-common-text;
+  }
+
+  a:hover, a:active, a:focus {
+    color: $color-primary;
+    background-color: $color-bk-hover-blue;
   }
 }
 

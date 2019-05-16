@@ -79,6 +79,16 @@ export const post = (url, data) => {
   })
 }
 
+export const put = (url, data) => {
+  return new Promise((resolve, reject) => {
+    request.put(url, data).then(response => {
+      resolve(response.data)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 export const fetch = (url, param) => {
   return new Promise((resolve, reject) => {
     request.get(url, {
