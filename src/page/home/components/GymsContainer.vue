@@ -12,7 +12,7 @@
 
 <script>
   import ImgTextCard from '@/components/ImgTextCard'
-  import {fetch, serverUrl} from '@/utils/request'
+  import {fetch, serverUrl} from '@/utils/axios'
   import {Message} from 'element-ui'
 
   export default {

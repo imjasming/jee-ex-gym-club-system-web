@@ -1,6 +1,6 @@
 import {getToken, setToken, removeToken} from '@/utils/auth'
 import {clearStore, getStore, setStore} from '@/utils/localStorage'
-import request, {post, put} from '@/utils/request'
+import axios, {post, put} from '@/utils/axios'
 import {Message} from 'element-ui'
 
 const user = {
@@ -36,13 +36,19 @@ const user = {
       return new Promise((resolve, reject) => {
         const username = loginForm.username
         const password = loginForm.password
-        request({
-          url: '/auth/login?username=' + username + '&password=' + password,
+        axios({
+          url: '/auth/form/token?username=' + username + '&password=' + password,
           method: 'post',
-          /*data: {
+          data: {
             'username': username,
-            'password': password
-          }*/
+            'password': password,
+            'grant_type': 'password',
+            'scope': 'all'
+          },
+          auth: {
+            username: 'client',
+            password: 'secret'
+          }
         }).then(response => {
           const data = response.data
           const token = data.tokenHead + data.token
@@ -61,7 +67,7 @@ const user = {
         const username = registerForm.username
         const email = registerForm.email
         const password = registerForm.password
-        request({
+        axios({
           url: '/register'/*?username=' + username + '&password=' + password + '&email=' + email*/,
           method: 'post',
           data: {
@@ -89,9 +95,9 @@ const user = {
     initUserData ({commit, state}) {
       return new Promise((resolve, reject) => {
         const username = state.username
-        const getInfo = request.get('/user/' + username + '/info')
-        const getTrainers = request.get('/user/' + username + '/trainers')
-        request.all([getInfo, getTrainers]).then(request.spread((info, trainers) => {
+        const getInfo = axios.get('/user/' + username + '/info')
+        const getTrainers = axios.get('/user/' + username + '/trainers')
+        axios.all([getInfo, getTrainers]).then(axios.spread((info, trainers) => {
             commit('SET_INFO', info.data)
             commit('SET_TRAINER_LIST', trainers.data)
             resolve()
@@ -107,7 +113,7 @@ const user = {
     getInfo ({commit, state}) {
       return new Promise((resolve, reject) => {
         const username = state.userInfo.username
-        request({
+        axios({
           url: '/user/' + username + '/info',
           method: 'get'
         }).then(response => {
@@ -123,7 +129,7 @@ const user = {
     getMyTrainerList ({commit, state}) {
       return new Promise((resolve, reject) => {
         const username = state.userInfo.username
-        request({
+        axios({
           url: '/user/' + username + '/trainers',
           method: 'get'
         }).then(response => {

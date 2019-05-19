@@ -55,10 +55,10 @@
 </template>
 
 <script>
-  import {fetch, post} from '@/utils/request'
+  import {fetch, post} from '@/utils/axios'
   import {emailRule, passwordRule} from '@/utils/validator'
   import {Message} from 'element-ui'
-  import {serverUrl} from '@/utils/request'
+  import {serverUrl} from '@/utils/axios'
 
   export default {
     data () {

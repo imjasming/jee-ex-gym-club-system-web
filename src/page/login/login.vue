@@ -28,7 +28,7 @@
 
 <script>
   import {passwordRule, usernameRule} from '@/utils/validator'
-  import {fetch} from '@/utils/request'
+  import {fetch} from '@/utils/axios'
 
   export default {
     data () {

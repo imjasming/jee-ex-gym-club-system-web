@@ -5,19 +5,22 @@ import {Message, MessageBox} from 'element-ui'
 
 export const serverUrl = 'http://127.0.0.1:8081'
 
-const request = axios.create({
-  baseURL: serverUrl,
-  timeout: 16000
-})
+axios.default.timeout = 16000
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.baseURL = '/api'
 
+/*const axios = axios.create({
+  //baseURL: serverUrl,
+  timeout: 16000
+})*/
 // !!!!!!!!!!!!!!!!!!!!!!!
 // 发送多个请求时，由于使用的时自己封装的 axios，以下两函数没有封装进去
 // !!!!!!!!!!!!!!!!!!!!!!
-request.all = axios.all
-request.spread = axios.spread
+//axios.all = axios.all
+//axios.spread = axios.spread
 
 // request拦截器
-request.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {
   if (store.getters.token) {
     config.headers['Authorization'] = getToken()
   }
@@ -36,7 +39,7 @@ request.interceptors.request.use(config => {
 })
 
 // response拦截器
-request.interceptors.response.use(
+axios.interceptors.response.use(
   response => {
     return response
   },
@@ -71,7 +74,7 @@ request.interceptors.response.use(
 
 export const post = (url, data) => {
   return new Promise((resolve, reject) => {
-    request.post(url, data).then(response => {
+    axios.post(url, data).then(response => {
       resolve(response.data)
     }).catch(error => {
       reject(error)
@@ -81,7 +84,7 @@ export const post = (url, data) => {
 
 export const put = (url, data) => {
   return new Promise((resolve, reject) => {
-    request.put(url, data).then(response => {
+    axios.put(url, data).then(response => {
       resolve(response.data)
     }).catch(error => {
       reject(error)
@@ -91,7 +94,7 @@ export const put = (url, data) => {
 
 export const fetch = (url, param) => {
   return new Promise((resolve, reject) => {
-    request.get(url, {
+    axios.get(url, {
       params: param
     }).then(response => {
       resolve(response.data)
@@ -101,4 +104,4 @@ export const fetch = (url, param) => {
   })
 }
 
-export default request
+export default axios
