@@ -7,7 +7,7 @@ export const serverUrl = 'http://127.0.0.1:8081'
 
 axios.default.timeout = 16000
 axios.defaults.headers.post['Content-Type'] = 'application/json'
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = 'http://127.0.0.1:8082'
 
 /*const axios = axios.create({
   //baseURL: serverUrl,

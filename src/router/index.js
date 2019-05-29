@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import store from '@/store'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -93,7 +93,6 @@ router.beforeEach((to, from, next) => {
   if (getToken()) {
     if (to.path === '/login') {
       next('/home')
-      NProgress.done()
     } else {
       if (!store.getters.userInfo || store.getters.userInfo.length === 0 || !store.getters.trainerList) {
         store.dispatch('initUserData').then(res => { // 拉取用户信息

@@ -6,8 +6,8 @@
           <img class="round-head-icon" :src="serverUrl + '/img/head.png'">
         </div>
         <div class="dp-in-bl">
-          <p class="prim-text">{{userInfo.username}}</p>
-          <p class="sub-text">email: {{userInfo.email}}</p>
+          <p class="prim-text">{{ userInfo ? userInfo.username : ''}}</p>
+          <p class="sub-text">email: {{userInfo?userInfo.email : ''}}</p>
         </div>
       </div>
     </el-card>
@@ -63,7 +63,7 @@
   export default {
     data () {
       const repasswordRule = (rule, value, callback) => {
-        if (this.registerForm.newPassword !== value) {
+        if (this.pswForm.newPassword !== value) {
           callback(new Error('两次密码不相同！'))
         }
         return passwordRule(rule, value, callback)

@@ -1,6 +1,6 @@
 import {getToken, setToken, removeToken} from '@/utils/auth'
 import {clearStore, getStore, setStore} from '@/utils/localStorage'
-import axios, {post, put} from '@/utils/axios'
+import axios, {fetch, post, put} from '@/utils/axios'
 import {Message} from 'element-ui'
 
 const user = {
@@ -51,7 +51,7 @@ const user = {
           }
         }).then(response => {
           const data = response.data
-          const token = data.tokenHead + data.token
+          const token = `${data.tokenType} ${data.value}`
           commit('SET_TOKEN', token)
           commit('SET_USERNAME', username)
           setToken(token)
@@ -68,7 +68,7 @@ const user = {
         const email = registerForm.email
         const password = registerForm.password
         axios({
-          url: '/register'/*?username=' + username + '&password=' + password + '&email=' + email*/,
+          url: '/register',
           method: 'post',
           data: {
             username,
@@ -93,21 +93,16 @@ const user = {
       })
     },
     initUserData ({commit, state}) {
-      return new Promise((resolve, reject) => {
-        const username = state.username
-        const getInfo = axios.get('/user/' + username + '/info')
-        const getTrainers = axios.get('/user/' + username + '/trainers')
-        axios.all([getInfo, getTrainers]).then(axios.spread((info, trainers) => {
-            commit('SET_INFO', info.data)
-            commit('SET_TRAINER_LIST', trainers.data)
-            resolve()
-          })
-        ).catch(error => {
-          if (error.response.status === 404) {
-            resolve()
-          }
-          reject(error)
-        })
+      const username = state.username
+      fetch(`/user/${username}/info`).then(data => {
+        commit('SET_INFO', data)
+      }).catch(error => {
+
+      })
+      fetch(`/user/${username}/trainers`).then(data => {
+        commit('SET_TRAINER_LIST', data)
+      }).catch(error => {
+
       })
     },
     getInfo ({commit, state}) {
