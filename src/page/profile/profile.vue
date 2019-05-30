@@ -125,16 +125,17 @@
         return this.$store.state.user.userInfo
       },
       userEmail () {
-        let userInfo = this.userInfo()
-        return userInfo ? (userInfo.email ? userInfo.email : '未设置') : ''
+        let userInfo = this.userInfo
+        return userInfo ? userInfo.email : ''
       },
       username () {
-        let userInfo = this.userInfo()
+        let userInfo = this.userInfo
         return userInfo ? userInfo.username : ''
       }
     },
     created () {
       this.fetchOauthBind()
+      this.profileForm.email = this.userEmail
     },
     methods: {
       oauthBind (provider) {
