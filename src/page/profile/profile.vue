@@ -6,11 +6,39 @@
           <img class="round-head-icon" :src="serverUrl + '/img/head.png'">
         </div>
         <div class="dp-in-bl">
-          <p class="prim-text">{{ userInfo ? userInfo.username : ''}}</p>
-          <p class="sub-text">email: {{userInfo?userInfo.email : ''}}</p>
+          <p class="prim-text">{{username}}</p>
+          <p class="sub-text">email: {{userEmail}}</p>
         </div>
       </div>
     </el-card>
+
+    <el-card shadow="never">
+      <el-table
+        :data="oauthBindList"
+        style="width: 100%">
+        <el-table-column
+          prop="provider"
+          label="第三方账户"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="状态"
+          width="180">
+          <template slot-scope="scope">
+            <div v-if="scope.row.status">
+              <p class="dp-in-bl">已绑定</p>
+              <el-button class="dp-in-bl" type="text" @click="oauthRemoveBind(scope.row.provider)">解绑</el-button>
+            </div>
+            <div v-else>
+              <p class="dp-in-bl">未绑定</p>
+              <el-button class="dp-in-bl" type="text" @click="oauthBind(scope.row.provider)">绑定</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
     <el-card shadow="never">
       <el-form id="profileForm" class="input-form"
                label-position="left"
@@ -55,7 +83,7 @@
 </template>
 
 <script>
-  import {fetch, post} from '@/utils/axios'
+  import {del, fetch, post} from '@/utils/axios'
   import {emailRule, passwordRule} from '@/utils/validator'
   import {Message} from 'element-ui'
   import {serverUrl} from '@/utils/axios'
@@ -69,6 +97,7 @@
         return passwordRule(rule, value, callback)
       }
       return {
+        oauthBindList: [],
         serverUrl: serverUrl,
         profileTitle: '',
         profileLoading: false,
@@ -94,12 +123,49 @@
     computed: {
       userInfo () {
         return this.$store.state.user.userInfo
+      },
+      userEmail () {
+        let userInfo = this.userInfo()
+        return userInfo ? (userInfo.email ? userInfo.email : '未设置') : ''
+      },
+      username () {
+        let userInfo = this.userInfo()
+        return userInfo ? userInfo.username : ''
       }
     },
     created () {
-      //this.initUser()
+      this.fetchOauthBind()
     },
     methods: {
+      oauthBind (provider) {
+        post(`/connect/${provider}`).then(data => {
+          //Message.success('绑定成功')
+          fetch(data).then(data => {
+
+          }).catch(error => {
+
+          })
+        }).catch(error => {
+          Message.error(`绑定失败${error.message}`)
+        })
+      },
+      oauthRemoveBind (provider) {
+        del(`/connect/${provider}`).then(data => {
+          Message.success('解绑成功')
+        }).catch(error => {
+          Message.error(`解绑失败${error.message}`)
+        })
+      },
+
+      fetchOauthBind () {
+        fetch('connect').then(data => {
+          if (data != null) {
+            this.oauthBindList = data
+          }
+        }).catch(error => {
+
+        })
+      },
       initUser () {
         fetch('/user/get-info').then(response => {
           this.$store.commit('SET_INFO', response)

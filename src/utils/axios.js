@@ -72,6 +72,16 @@ axios.interceptors.response.use(
   }
 )
 
+export const del = (url, data) => {
+  return new Promise((resolve, reject) => {
+    axios.delete(url, data).then(response => {
+      resolve(response.data)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 export const post = (url, data) => {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(response => {
