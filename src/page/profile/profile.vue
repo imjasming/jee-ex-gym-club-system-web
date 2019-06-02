@@ -33,6 +33,7 @@
             <div v-else>
               <p class="dp-in-bl">未绑定</p>
               <el-button class="dp-in-bl" type="text" @click="oauthBind(scope.row.provider)">绑定</el-button>
+              <!--<a class="link-button" :href="`${serverUrl}/connect/${scope.row.provider}`">绑定</a>-->
             </div>
           </template>
         </el-table-column>
@@ -159,7 +160,7 @@
       },
 
       fetchOauthBind () {
-        fetch('connect').then(data => {
+        fetch('/connect').then(data => {
           if (data != null) {
             this.oauthBindList = data
           }

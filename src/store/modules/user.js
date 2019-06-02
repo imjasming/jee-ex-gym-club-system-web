@@ -79,8 +79,8 @@ const user = {
           data: {
             username, email, password, key
           }
-        }).then(() => {
-          resolve()
+        }).then(data => {
+          resolve(data.data)
         }).catch(error => {
           reject(error)
         })

@@ -1,5 +1,12 @@
 <template>
   <div class="form-container">
+    <el-card class="box-card title-pane">
+      <div slot="header" class="clearfix">
+      </div>
+      <div class="text item">
+        <span>登录到 Gym Club</span>
+      </div>
+    </el-card>
     <el-form id="loginForm" class="input-form"
              status-icon
              label-width="6rem"

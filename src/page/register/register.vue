@@ -14,7 +14,8 @@
              ref="registerForm"
              :rules="registerRules">
       <el-form-item>
-        <el-alert v-if="responseMessage && responseMessage !== ''" :title="responseMessage" type="error"></el-alert>
+        <el-alert v-if="responseMessage && responseMessage !== ''"
+                  :title="errorMessage" type="error"></el-alert>
       </el-form-item>
       <el-form-item prop="username" label="用户名">
         <el-input type="text" v-model="registerForm.username"></el-input>
@@ -52,6 +53,7 @@
       }
 
       return {
+        downCountNum: 0,
         responseMessage: '',
         bindKey: '',
         title: '注册一个账号吧',
@@ -71,10 +73,19 @@
         }
       }
     },
+    computed: {
+      errorMessage () {
+        return this.downCountNum === 0 ? this.responseMessage : `${this.responseMessage}${this.downCountNum}s后跳转到登录界面`
+      }
+    },
     created () {
       this.initTitle()
     },
     methods: {
+      downCountStart (timeout) {
+        this.downCountNum = timeout
+        setInterval(() => this.downCountNum -= 1, 1000)
+      },
       initTitle () {
         this.bindKey = this.$route.query.key
         if (this.bindKey) {
@@ -93,9 +104,20 @@
             }
 
             this.$store.dispatch(dispatchTo, this.registerForm).then(data => {
-              this.loading = false
-              this.$router.push({path: '/login'})
-            }).catch(() => {
+                this.loading = false
+                const code = data.code
+                if (code == 200) {
+                  this.$router.push({path: '/login'})
+                } else {
+                  this.responseMessage = data.message
+                  if (code === 500) {
+                    const timeout = 60
+                    this.downCountStart(timeout)
+                    setInterval(() => this.$router.replace({path: '/login'}), timeout * 1000)
+                  }
+                }
+              }
+            ).catch(() => {
               this.loading = false
             })
           } else {
