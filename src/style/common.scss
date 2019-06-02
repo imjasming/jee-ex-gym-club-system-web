@@ -36,11 +36,18 @@ html, body, p {
   }
 
   .form-container {
+    padding: 2% 0 0;
     margin: auto;
 
+    .title-pane {
+      max-width: 36rem;
+      margin: auto auto 1.5rem;
+      text-align: center;
+      font-size: 1.2rem;
+    }
     form {
-      padding: 6rem 6rem 6rem 0;
-      box-shadow: 0 0 0.2rem #000000;
+      padding: 3rem 6rem 1rem 0;
+      box-shadow: 0 0 0.5rem rgba(0, 0, 0, .1);
       transition: all 0.5s;
 
       input {

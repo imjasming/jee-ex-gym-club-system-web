@@ -1,11 +1,21 @@
 <template>
   <div class="form-container">
+    <el-card class="box-card title-pane">
+      <div slot="header" class="clearfix">
+      </div>
+      <div class="text item">
+        <span>{{title}}</span>
+      </div>
+    </el-card>
     <el-form id="registerForm" class="input-form"
              status-icon
              label-width="80px"
              :model="registerForm"
              ref="registerForm"
              :rules="registerRules">
+      <el-form-item>
+        <el-alert v-if="responseMessage && responseMessage !== ''" :title="responseMessage" type="error"></el-alert>
+      </el-form-item>
       <el-form-item prop="username" label="用户名">
         <el-input type="text" v-model="registerForm.username"></el-input>
       </el-form-item>
@@ -42,6 +52,9 @@
       }
 
       return {
+        responseMessage: '',
+        bindKey: '',
+        title: '注册一个账号吧',
         loading: false,
         registerForm: {
           username: '',
@@ -58,12 +71,28 @@
         }
       }
     },
+    created () {
+      this.initTitle()
+    },
     methods: {
+      initTitle () {
+        this.bindKey = this.$route.query.key
+        if (this.bindKey) {
+          this.title = '初始化绑定账户'
+        }
+      },
       handleRegister () {
         this.$refs.registerForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.$store.dispatch('register', this.registerForm).then(() => {
+            let dispatchTo = 'register'
+
+            if (this.bindKey && this.bindKey !== '') {
+              this.registerForm.key = this.bindKey
+              dispatchTo = 'socialBind'
+            }
+
+            this.$store.dispatch(dispatchTo, this.registerForm).then(data => {
               this.loading = false
               this.$router.push({path: '/login'})
             }).catch(() => {

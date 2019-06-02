@@ -14,6 +14,7 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+      setToken(token)
     },
     SET_USERNAME: (state, username) => {
       state.username = username
@@ -32,12 +33,18 @@ const user = {
   },
 
   actions: {
+    initAccessToken ({commit}, param) {
+      const token = `${param.tokenType} ${param.token}`
+      commit('SET_TOKEN', token)
+      commit('SET_USERNAME', param.username)
+    },
+
     login ({commit}, loginForm) {
       return new Promise((resolve, reject) => {
         const username = loginForm.username
         const password = loginForm.password
         axios({
-          url: '/auth/form/token?username=' + username + '&password=' + password,
+          url: `/auth/form/token?username=${username}&password=${password}`,
           method: 'post',
           data: {
             'username': username,
@@ -46,15 +53,33 @@ const user = {
             'scope': 'all'
           },
           auth: {
-            username: 'client',
-            password: 'secret'
+            username: 'client', password: 'secret'
           }
         }).then(response => {
           const data = response.data
           const token = `${data.tokenType} ${data.value}`
           commit('SET_TOKEN', token)
           commit('SET_USERNAME', username)
-          setToken(token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    socialBind ({commit}, registerForm) {
+      return new Promise((resolve, reject) => {
+        const username = registerForm.username
+        const email = registerForm.email
+        const password = registerForm.password
+        const key = registerForm.key
+        axios({
+          url: '/social/bind',
+          method: 'post',
+          data: {
+            username, email, password, key
+          }
+        }).then(() => {
           resolve()
         }).catch(error => {
           reject(error)
@@ -67,6 +92,7 @@ const user = {
         const username = registerForm.username
         const email = registerForm.email
         const password = registerForm.password
+
         axios({
           url: '/register',
           method: 'post',

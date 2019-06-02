@@ -45,10 +45,26 @@
         oauthList: [],
       }
     },
+    created () {
+      this.checkToken()
+    },
     mounted () {
       this.getOauthClients()
     },
     methods: {
+      checkToken () {
+        const token = this.$route.query.token
+        const tokenType = this.$route.query.tokenType
+        const username = this.$route.query.user
+        if (token && username) {
+          this.$store.dispatch('initAccessToken', {'username': username, 'token': token, 'tokenType': tokenType})
+            .then(() => {
+              this.$router.push({name: 'profile'})
+            }).catch(error => {
+
+          })
+        }
+      },
       handleLogin () {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
