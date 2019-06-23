@@ -53,7 +53,7 @@
       }
 
       return {
-        downCountNum: 0,
+        downCountTime: 0,
         responseMessage: '',
         bindKey: '',
         title: '注册一个账号吧',
@@ -75,16 +75,19 @@
     },
     computed: {
       errorMessage () {
-        return this.downCountNum === 0 ? this.responseMessage : `${this.responseMessage}${this.downCountNum}s后跳转到登录界面`
+        // downCountTime == 0 则非错误页面跳转
+        return this.downCountTime === 0 ? this.responseMessage : `${this.responseMessage}${this.downCountTime}s后跳转到登录界面`
       }
     },
     created () {
       this.initTitle()
     },
     methods: {
-      downCountStart (timeout) {
-        this.downCountNum = timeout
-        setInterval(() => this.downCountNum -= 1, 1000)
+      downCount () {
+        if (this.downCountTime > 0) {
+          this.downCountTime--
+          setTimeout(this.downCount, 1000)
+        }
       },
       initTitle () {
         this.bindKey = this.$route.query.key
@@ -111,9 +114,10 @@
                 } else {
                   this.responseMessage = data.message
                   if (code === 500) {
-                    const timeout = 60
-                    this.downCountStart(timeout)
-                    setInterval(() => this.$router.replace({path: '/login'}), timeout * 1000)
+                    const timeout = 8
+                    this.downCountTime = timeout
+                    this.downCount()
+                    setTimeout(() => this.$router.replace({path: '/login'}), timeout * 1000)
                   }
                 }
               }
@@ -129,6 +133,9 @@
       redirectToLogin () {
         this.$router.push({path: '/login'})
       }
+    },
+    destroyed () {
+      clearTimeout(this.downCount)
     }
   }
 </script>

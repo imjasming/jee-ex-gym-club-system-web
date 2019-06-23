@@ -88,7 +88,6 @@ const router = new VueRouter({
 
 const whiteList = ['/login', '/register']
 router.beforeEach((to, from, next) => {
-  NProgress.start()
   // authorized, permit all
   if (getToken()) {
     if (to.path === '/login') {
@@ -113,7 +112,6 @@ router.beforeEach((to, from, next) => {
         path: '/login',
         //query: {redirect: to.fullPath}
       })
-      NProgress.done()
     } else {// to the path in white list
       next()// 一定要调用 next()
     }
@@ -121,7 +119,6 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {
-  NProgress.done()
 })
 
 export default router

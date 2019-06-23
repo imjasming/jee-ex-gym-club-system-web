@@ -32,8 +32,8 @@
             </div>
             <div v-else>
               <p class="dp-in-bl">未绑定</p>
-              <el-button class="dp-in-bl" type="text" @click="oauthBind(scope.row.provider)">绑定</el-button>
-              <!--<a class="link-button" :href="`${serverUrl}/connect/${scope.row.provider}`">绑定</a>-->
+              <!--<el-button class="dp-in-bl" type="text" @click="oauthBind(scope.row.provider)">绑定</el-button>-->
+              <a class="link-button" :href="`${serverUrl}/connect/${scope.row.provider}`">绑定</a>
             </div>
           </template>
         </el-table-column>
@@ -126,11 +126,11 @@
         return this.$store.state.user.userInfo
       },
       userEmail () {
-        let userInfo = this.userInfo
+        const userInfo = this.userInfo
         return userInfo ? userInfo.email : ''
       },
       username () {
-        let userInfo = this.userInfo
+        const userInfo = this.userInfo
         return userInfo ? userInfo.username : ''
       }
     },
@@ -155,7 +155,7 @@
         del(`/connect/${provider}`).then(data => {
           Message.success('解绑成功')
         }).catch(error => {
-          Message.error(`解绑失败${error.message}`)
+          Message.error(`解绑失败:${error.message}`)
         })
       },
 
