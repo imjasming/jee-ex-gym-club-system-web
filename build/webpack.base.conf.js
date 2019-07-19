@@ -14,7 +14,6 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -38,6 +37,8 @@ module.exports = {
   // 在这里用
   //!!!!!!!!!!!!!!!!!!!!!
   plugins: [
+    // 它的职责是将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。
+    // 例如，如果你有一条匹配 /\.js$/ 的规则，那么它会应用到 .vue 文件里的 <script> 块
     new VueLoaderPlugin(),
   ],
   module: {

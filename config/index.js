@@ -58,7 +58,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/', //要上传到的服务器下的文件夹
 
     /**
      * Source Maps
