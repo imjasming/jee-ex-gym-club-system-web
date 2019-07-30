@@ -31,7 +31,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     splitChunks: {
       chunks: 'async',
-      minSize: 30000,
+      minSize: 20000,
       minChunks: 1,
       maxAsyncRequests: 5,
       maxInitialRequests: 3,
@@ -110,26 +110,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // enable scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
     // split vendor js into its own file
-    new webpack.optimize.SplitChunksPlugin({
-      chunks: 'async',
-      minSize: 30000,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      name: true,
-      cacheGroups: {
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
-        }
-      }
-    }),
-
+    // 提取共同js代码，但是这项是针对我们自己写的一些公共js，在分thunk时会很有用
+    //new webpack.optimize.SplitChunksPlugin(),
     // 以下 commonChunk 已废除
     /* new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -168,7 +150,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
-  ]
+  ],
+
 })
 
 if (config.build.productionGzip) {

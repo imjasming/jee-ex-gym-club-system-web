@@ -3,7 +3,7 @@ import store from '../store'
 import {getToken} from '@/utils/auth'
 import {Message, MessageBox} from 'element-ui'
 
-export const serverUrl = 'http://127.0.0.1:8082'
+export const serverUrl = 'http://47.102.206.229:8050'
 
 axios.default.timeout = 16000
 axios.defaults.headers.post['Content-Type'] = 'application/json'
